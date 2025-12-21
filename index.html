@@ -257,6 +257,24 @@
         </div>
       </section>
     </div>
+
+    <h1 style="margin-top: 2rem;">Area Buzzer</h1>
+    <div class="hover-row" style="width: 100%; flex-wrap: wrap;">
+      <section class="card">
+        <h1>Buzzer 1</h1>
+        <div class="actions">
+          <button class="btn-on" id="btn-buzz-on">🟢 ON</button>
+          <button class="btn-off" id="btn-buzz-off">🔴 OFF</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h1>On Press Buzzer</h1>
+        <div class="actions single">
+          <button class="btn-blink" id="btn-buzz-press">👆 PREMI</button>
+        </div>
+      </section>
+    </div>
   </div>
 
   <section class="card">
@@ -301,6 +319,8 @@
       endpointOn5: "https://raspberrypi.taild4c19b.ts.net/accendi_luce5",
       endpointOff5: "https://raspberrypi.taild4c19b.ts.net/spegni_luce5",
       endpointEmail: "https://raspberrypi.taild4c19b.ts.net/email",
+      endpointBuzzOn: "https://raspberrypi.taild4c19b.ts.net/buzz1on",
+      endpointBuzzOff: "https://raspberrypi.taild4c19b.ts.net/buzz1off",
       endpointHigh: "https://raspberrypi.taild4c19b.ts.net/HighImportance",
       endpointMsg: "https://raspberrypi.taild4c19b.ts.net/NewMessageInChannel",
       endpointMeeting: "https://raspberrypi.taild4c19b.ts.net/meeting",
@@ -320,6 +340,9 @@
     const btnOff5 = document.getElementById("btn-off-5");
     const btnPress4 = document.getElementById("btn-press-4");
     const btnPress5 = document.getElementById("btn-press-5");
+    const btnBuzzOn = document.getElementById("btn-buzz-on");
+    const btnBuzzOff = document.getElementById("btn-buzz-off");
+    const btnBuzzPress = document.getElementById("btn-buzz-press");
     const hov1 = document.getElementById("hov-1");
     const hov2 = document.getElementById("hov-2");
     const hov3 = document.getElementById("hov-3");
@@ -339,6 +362,8 @@
       btnOff4.disabled = isLoading;
       btnOn5.disabled = isLoading;
       btnOff5.disabled = isLoading;
+      btnBuzzOn.disabled = isLoading;
+      btnBuzzOff.disabled = isLoading;
       // Momentary buttons generally stay active to release
       btnBlink.disabled = isLoading;
       blinkSelector.disabled = isLoading;
@@ -368,6 +393,8 @@
       else if (action === "off4") url = CONFIG.endpointOff4;
       else if (action === "on5") url = CONFIG.endpointOn5;
       else if (action === "off5") url = CONFIG.endpointOff5;
+      else if (action === "buzzOn") url = CONFIG.endpointBuzzOn;
+      else if (action === "buzzOff") url = CONFIG.endpointBuzzOff;
       else if (action === "email") url = CONFIG.endpointEmail;
       else if (action === "high") url = CONFIG.endpointHigh;
       else if (action === "msg") url = CONFIG.endpointMsg;
@@ -411,6 +438,8 @@
     btnOff4.addEventListener("click", () => sendCommand("off4"));
     btnOn5.addEventListener("click", () => sendCommand("on5"));
     btnOff5.addEventListener("click", () => sendCommand("off5"));
+    btnBuzzOn.addEventListener("click", () => sendCommand("buzzOn"));
+    btnBuzzOff.addEventListener("click", () => sendCommand("buzzOff"));
 
     // Momentary Switch Logic
     function addMomentarySwitch(btn, actionOn, actionOff) {
@@ -432,6 +461,7 @@
 
     addMomentarySwitch(btnPress4, "on4", "off4");
     addMomentarySwitch(btnPress5, "on5", "off5");
+    addMomentarySwitch(btnBuzzPress, "buzzOn", "buzzOff");
 
     // Hover Switch Logic
     function addHoverSwitch(el, actionOn, actionOff) {
