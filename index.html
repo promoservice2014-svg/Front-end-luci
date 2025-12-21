@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -200,7 +201,8 @@
     }
   </style>
 </head>
-  <body>
+
+<body>
   <main class="card" aria-live="polite">
     <h1>Controllo luce</h1>
     <p>
@@ -232,18 +234,24 @@
 
     <div class="helpers">
       <label class="toggle">
-        <input type="checkbox" id="no-cors-toggle" />
+        <input type="checkbox" id="use-proxy-toggle" />
         <span>
-          Se il browser blocca la chiamata, attiva l’invio in modalità <code>no-cors</code>.
-          La richiesta parte comunque ma il browser non potrà leggere la risposta. Se il tentativo standard
-          fallisce per il CORS, la pagina riprova automaticamente in <code>no-cors</code> (senza header come
-          <code>Authorization</code>): aggiungi il token lato proxy.
+          <strong>Usa Proxy Locale:</strong> Invia richieste a <code>localhost:3000</code>.
+          Necessario per evitare errori CORS. Assicurati di aver avviato <code>node fast-proxy.js</code>.
         </span>
       </label>
-      <p class="hint">
-        Se continui a vedere errori, abilita gli header CORS sull’endpoint o passa da un proxy/reverse proxy
-        che li esponga (ad es. Nginx, Caddy o Power Automate impostato come proxy con risposta all’OPTIONS).
-        In modalità <code>no-cors</code> il browser non può inviare header come <code>Authorization</code>, quindi usa un proxy che li aggiunga lato server.
+
+      <label class="toggle" style="margin-top: 0.5rem; opacity: 0.8;">
+        <input type="checkbox" id="no-cors-toggle" />
+        <span>
+          Modalità <code>no-cors</code> (fallback). Utile se non usi il proxy, ma non invia l'header Authorization.
+        </span>
+      </label>
+
+      <p class="hint" style="margin-top: 0.75rem">
+        Se il pulsante non funziona, apri il terminale nella cartella e lancia: <br>
+        <code>node fast-proxy.js</code> <br>
+        per avviare il bridge verso il Raspberry Pi.
       </p>
     </div>
 
@@ -263,6 +271,7 @@
     const endpointOffInput = document.getElementById("endpoint-off");
     const tokenInput = document.getElementById("token");
     const noCorsToggle = document.getElementById("no-cors-toggle");
+    const useProxyToggle = document.getElementById("use-proxy-toggle");
 
     function setLoading(isLoading) {
       btnOn.disabled = isLoading;
@@ -287,9 +296,9 @@
       const headers = useNoCors
         ? undefined
         : {
-            Authorization: token,
-            "Content-Type": "application/json",
-          };
+          Authorization: token,
+          "Content-Type": "application/json",
+        };
 
       return {
         method: "POST",
@@ -324,67 +333,88 @@
     }
 
     async function sendCommand(action) {
-      const url = getEndpoint(action);
+      const originalUrl = getEndpoint(action);
+      const useProxy = useProxyToggle?.checked;
       const preferNoCors = noCorsToggle?.checked;
       const token = tokenInput.value.trim();
+
+      // Determine actual URL to call
+      let fetchUrl = originalUrl;
+      if (useProxy) {
+        fetchUrl = `http://localhost:3000/?target=${encodeURIComponent(originalUrl)}`;
+      }
+
       setLoading(true);
       updateStatus({
         label: "Invio richiesta...",
         ok: true,
-        detail: `Richiesta POST verso ${url}${preferNoCors ? " (modalità no-cors)" : ""}`,
+        detail: `Richiesta POST verso ${useProxy ? 'Proxy Locale -> ' : ''}${originalUrl}`,
       });
 
       const runRequest = async ({ useNoCors, reason }) => {
-        const response = await fetch(url, createRequestOptions({ token, useNoCors }));
+        // If using proxy, we don't use no-cors mode, because the proxy handles CORS
+        const mode = (useProxy || !useNoCors) ? "cors" : "no-cors";
 
-        if (useNoCors && response.type === "opaque") {
+        const response = await fetch(fetchUrl, {
+          method: "POST",
+          headers: useNoCors && !useProxy ? undefined : {
+            "Authorization": token,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({}),
+          mode: mode
+        });
+
+        if (mode === "no-cors" && response.type === "opaque") {
           updateStatus({
             label: `Richiesta inviata${reason ? ` (${reason})` : ""}`,
             ok: true,
-            detail:
-              "Il browser non può leggere la risposta in no-cors e non invia l'header Authorization. Se il server richiede il token, aggiungilo lato proxy o abilita il CORS sull'endpoint.",
+            detail: "Modalità no-cors: impossibile leggere la risposta. Verifica che l'azione sia avvenuta.",
           });
           return;
         }
 
         const text = await response.text();
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${text}`);
+        }
+
         updateStatus({
-          label: response.ok ? "Operazione completata" : "Errore dalla chiamata",
-          ok: response.ok,
-          detail: `${response.status} ${response.statusText} — ${text || "nessun corpo restituito"}`,
+          label: "Operazione completata",
+          ok: true,
+          detail: `Risposta server: ${text}`,
         });
       };
 
       try {
         await runRequest({ useNoCors: preferNoCors, reason: preferNoCors ? "no-cors forzato" : "" });
       } catch (error) {
-        console.error("Errore durante la chiamata al Raspberry Pi", error);
+        console.error("Errore chiamata", error);
 
-        if (!preferNoCors && isLikelyCorsError(error)) {
+        // If proxy failed, suggest running it
+        if (useProxy && (error.message.includes("Failed to fetch") || error.message.includes("NetworkError"))) {
           updateStatus({
-            label: "CORS bloccato, ritento in no-cors",
+            label: "Errore Proxy",
             ok: false,
-            detail: "Il browser ha bloccato la risposta. Ritento senza leggere il body: assicurati che il proxy aggiunga l'Authorization.",
+            detail: "Impossibile contattare il proxy locale. Assicurati di aver lanciato 'node fast-proxy.js' nel terminale."
           });
+          return;
+        }
 
-          try {
-            await runRequest({ useNoCors: true, reason: "fallback no-cors" });
-            return;
-          } catch (fallbackError) {
-            console.error("Fallito anche il fallback no-cors", fallbackError);
-            updateStatus({
-              label: "Invio in no-cors non riuscito",
-              ok: false,
-              detail: explainNetworkError(fallbackError, url),
-            });
-            return;
-          }
+        if (!useProxy && !preferNoCors && isLikelyCorsError(error)) {
+          updateStatus({
+            label: "CORS bloccato",
+            ok: false,
+            detail: "Il browser ha bloccato la richiesta. Prova ad attivare 'Usa Proxy Locale' e avvia il proxy nodejs.",
+          });
+          return;
         }
 
         updateStatus({
-          label: "Impossibile contattare il server",
+          label: "Errore",
           ok: false,
-          detail: explainNetworkError(error, url),
+          detail: error.message
         });
       } finally {
         setLoading(false);
@@ -428,4 +458,5 @@
     btnCurl.addEventListener("click", () => copyCurl("on"));
   </script>
 </body>
+
 </html>
