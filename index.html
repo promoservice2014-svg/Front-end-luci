@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Controllo luce</title>
+  <title>Luce 1</title>
   <style>
     :root {
       color-scheme: light dark;
@@ -30,109 +30,40 @@
     }
 
     .card {
-      width: min(520px, 100%);
+      width: min(320px, 100%);
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 20px;
       box-shadow: var(--shadow);
-      padding: 1.5rem;
+      padding: 2rem;
+      text-align: center;
     }
 
     h1 {
-      margin: 0 0 0.25rem;
-      font-size: 1.6rem;
+      margin: 0 0 1.5rem;
+      font-size: 1.8rem;
       letter-spacing: -0.02em;
-    }
-
-    p {
-      margin: 0 0 1.25rem;
-      color: var(--muted);
-      line-height: 1.6;
+      font-weight: 700;
     }
 
     .actions {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
-
-    .helpers {
-      margin: 0 0 1rem;
-      display: grid;
-      gap: 0.45rem;
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    .toggle {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 0.6rem;
-      align-items: center;
-    }
-
-    .toggle input {
-      width: 1rem;
-      height: 1rem;
-      accent-color: var(--accent);
-    }
-
-    .hint {
-      margin: 0;
-      font-size: 0.9rem;
-    }
-
-    .config {
-      background: rgba(31, 41, 55, 0.5);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      display: grid;
-      gap: 0.75rem;
-    }
-
-    .field {
-      display: grid;
-      gap: 0.4rem;
-    }
-
-    label {
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    input {
-      background: #0c121c;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.75rem 0.9rem;
-      color: var(--text);
-      font-size: 0.95rem;
-    }
-
-    input:focus {
-      outline: 2px solid rgba(34, 197, 94, 0.4);
-      border-color: var(--accent);
-    }
-
-    input::placeholder {
-      color: var(--muted);
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
     }
 
     button {
       appearance: none;
       border: none;
-      border-radius: 12px;
-      padding: 0.9rem 1.2rem;
-      font-size: 1rem;
-      font-weight: 600;
+      border-radius: 16px;
+      padding: 1.2rem 1rem;
+      font-size: 1.1rem;
+      font-weight: 700;
       color: #0b0f13;
       cursor: pointer;
       transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+      width: 100%;
     }
 
     button:disabled {
@@ -149,286 +80,107 @@
     .btn-off {
       background: linear-gradient(135deg, #ef4444, #b91c1c);
       box-shadow: 0 8px 24px rgba(239, 68, 68, 0.23);
-    }
-
-    #btn-curl {
-      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-      box-shadow: 0 8px 24px rgba(14, 165, 233, 0.25);
-      color: #04111d;
+      color: #fff;
     }
 
     button:not(:disabled):hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
     }
 
     button:not(:disabled):active {
       transform: translateY(0);
-      filter: brightness(0.98);
+      filter: brightness(0.95);
     }
 
     .status {
-      background: rgba(31, 41, 55, 0.7);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem;
-      display: grid;
-      gap: 0.4rem;
-      font-size: 0.95rem;
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
       color: var(--muted);
+      min-height: 1.2em;
     }
 
-    .status strong {
-      color: var(--text);
-    }
-
-    .status .success {
-      color: var(--accent);
-    }
-
-    .status .error {
+    .status.error {
       color: var(--danger);
     }
 
-    @media (max-width: 480px) {
-      .card {
-        padding: 1.25rem;
-      }
-
-      h1 {
-        font-size: 1.4rem;
-      }
+    .status.success {
+      color: var(--accent);
     }
   </style>
 </head>
 
 <body>
-  <main class="card" aria-live="polite">
-    <h1>Controllo luce</h1>
-    <p>
-      Usa i pulsanti per inviare una richiesta POST al Raspberry Pi e accendere o spegnere la luce.
-      Puoi personalizzare URL e token per allinearti a Power Automate o ad altri proxy.
-    </p>
-
-    <section class="config">
-      <div class="field">
-        <label for="endpoint-on">Endpoint accensione</label>
-        <input id="endpoint-on" value="https://raspberrypi.taild4c19b.ts.net/accendi_luce" />
-      </div>
-      <div class="field">
-        <label for="endpoint-off">Endpoint spegnimento</label>
-        <input id="endpoint-off" value="https://raspberrypi.taild4c19b.ts.net/spegni_luce" />
-      </div>
-      <div class="field">
-        <label for="token">Header Authorization</label>
-        <input id="token" value="Bearer dario-raspi-led-2025-super-token-9fA3k!" />
-        <p class="hint">Usa lo stesso token che funziona da Power Automate o aggiungilo lato proxy.</p>
-      </div>
-    </section>
+  <main class="card">
+    <h1>Luce 1</h1>
 
     <div class="actions">
-      <button class="btn-on" id="btn-on">Accendi luce</button>
-      <button class="btn-off" id="btn-off">Spegni luce</button>
-      <button id="btn-curl">Copia comando curl</button>
+      <button class="btn-on" id="btn-on">ON</button>
+      <button class="btn-off" id="btn-off">OFF</button>
     </div>
 
-    <div class="helpers">
-      <label class="toggle">
-        <input type="checkbox" id="no-cors-toggle" />
-        <span>
-          Se il browser blocca la chiamata, attiva l’invio in modalità <code>no-cors</code>.
-          La richiesta parte comunque ma il browser non potrà leggere la risposta. Se il tentativo standard
-          fallisce per il CORS, la pagina riprova automaticamente in <code>no-cors</code> (senza header come
-          <code>Authorization</code>): aggiungi il token lato proxy.
-        </span>
-      </label>
-      <p class="hint">
-        Se continui a vedere errori, abilita gli header CORS sull’endpoint o passa da un proxy/reverse proxy
-        che li esponga (ad es. Nginx, Caddy o Power Automate impostato come proxy con risposta all’OPTIONS).
-        In modalità <code>no-cors</code> il browser non può inviare header come <code>Authorization</code>, quindi usa
-        un proxy che li aggiunga lato server.
-      </p>
-    </div>
-
-    <section class="status" id="status">
-      <div><strong>Stato:</strong> In attesa di un’azione.</div>
-      <div><strong>Ultimo aggiornamento:</strong> —</div>
-      <div><strong>Dettagli:</strong> Nessun tentativo effettuato.</div>
-    </section>
+    <div class="status" id="status"></div>
   </main>
 
   <script>
+    const CONFIG = {
+      endpointOn: "https://raspberrypi.taild4c19b.ts.net/accendi_luce",
+      endpointOff: "https://raspberrypi.taild4c19b.ts.net/spegni_luce",
+      token: "Bearer dario-raspi-led-2025-super-token-9fA3k!"
+    };
+
     const statusBox = document.getElementById("status");
     const btnOn = document.getElementById("btn-on");
     const btnOff = document.getElementById("btn-off");
-    const btnCurl = document.getElementById("btn-curl");
-    const endpointOnInput = document.getElementById("endpoint-on");
-    const endpointOffInput = document.getElementById("endpoint-off");
-    const tokenInput = document.getElementById("token");
-    const noCorsToggle = document.getElementById("no-cors-toggle");
 
     function setLoading(isLoading) {
       btnOn.disabled = isLoading;
       btnOff.disabled = isLoading;
     }
 
-    function updateStatus({ label, ok, detail }) {
-      const now = new Date().toLocaleTimeString("it-IT");
-      statusBox.innerHTML = `
-        <div><strong>Stato:</strong> <span class="${ok ? "success" : "error"}">${label}</span></div>
-        <div><strong>Ultimo aggiornamento:</strong> ${now}</div>
-        <div><strong>Dettagli:</strong> ${detail}</div>
-      `;
-    }
+    function showStatus(message, type = "neutral") {
+      statusBox.textContent = message;
+      statusBox.className = "status " + type;
 
-    function isLikelyCorsError(error) {
-      const message = (error?.message || "").toLowerCase();
-      return message.includes("failed to fetch") || message.includes("networkerror");
-    }
-
-    function createRequestOptions({ token, useNoCors }) {
-      const headers = useNoCors
-        ? undefined
-        : {
-          Authorization: token,
-          "Content-Type": "application/json",
-        };
-
-      return {
-        method: "POST",
-        headers,
-        body: JSON.stringify({}),
-        mode: useNoCors ? "no-cors" : "cors",
-        cache: "no-store",
-      };
-    }
-
-    function explainNetworkError(error, url) {
-      const message = error?.message || "Errore sconosciuto";
-      const target = new URL(url);
-
-      if (message.includes("Failed to fetch") || message.includes("NetworkError")) {
-        return [
-          "La richiesta è stata bloccata dal browser.",
-          "Se con curl funziona, probabilmente manca il CORS sull’endpoint o l’OPTIONS non risponde.",
-          `Aggiungi gli header CORS sul server (${target.origin}) oppure passa da un proxy/reverse-proxy che li esponga.`,
-        ].join(" ");
+      if (type !== "neutral") {
+        setTimeout(() => {
+          statusBox.textContent = "";
+          statusBox.className = "status";
+        }, 3000);
       }
-
-      if (message.toLowerCase().includes("certificate")) {
-        return "Certificato HTTPS non valido per il browser: verifica TLS o aggiungi un proxy con certificato attendibile.";
-      }
-
-      return `Errore di rete: ${message}`;
-    }
-
-    function getEndpoint(action) {
-      return action === "on" ? endpointOnInput.value.trim() : endpointOffInput.value.trim();
     }
 
     async function sendCommand(action) {
-      const url = getEndpoint(action);
-      const preferNoCors = noCorsToggle?.checked;
-      const token = tokenInput.value.trim();
+      const url = action === "on" ? CONFIG.endpointOn : CONFIG.endpointOff;
       setLoading(true);
-      updateStatus({
-        label: "Invio richiesta...",
-        ok: true,
-        detail: `Richiesta POST verso ${url}${preferNoCors ? " (modalità no-cors)" : ""}`,
-      });
-
-      const runRequest = async ({ useNoCors, reason }) => {
-        const response = await fetch(url, createRequestOptions({ token, useNoCors }));
-
-        if (useNoCors && response.type === "opaque") {
-          updateStatus({
-            label: `Richiesta inviata${reason ? ` (${reason})` : ""}`,
-            ok: true,
-            detail:
-              "Il browser non può leggere la risposta in no-cors e non invia l'header Authorization. Se il server richiede il token, aggiungilo lato proxy o abilita il CORS sull'endpoint.",
-          });
-          return;
-        }
-
-        const text = await response.text();
-        updateStatus({
-          label: response.ok ? "Operazione completata" : "Errore dalla chiamata",
-          ok: response.ok,
-          detail: `${response.status} ${response.statusText} — ${text || "nessun corpo restituito"}`,
-        });
-      };
+      showStatus("Invio...", "neutral");
 
       try {
-        await runRequest({ useNoCors: preferNoCors, reason: preferNoCors ? "no-cors forzato" : "" });
-      } catch (error) {
-        console.error("Errore durante la chiamata al Raspberry Pi", error);
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Authorization": CONFIG.token,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({})
+        });
 
-        if (!preferNoCors && isLikelyCorsError(error)) {
-          updateStatus({
-            label: "CORS bloccato, ritento in no-cors",
-            ok: false,
-            detail: "Il browser ha bloccato la risposta. Ritento senza leggere il body: assicurati che il proxy aggiunga l'Authorization.",
-          });
-
-          try {
-            await runRequest({ useNoCors: true, reason: "fallback no-cors" });
-            return;
-          } catch (fallbackError) {
-            console.error("Fallito anche il fallback no-cors", fallbackError);
-            updateStatus({
-              label: "Invio in no-cors non riuscito",
-              ok: false,
-              detail: explainNetworkError(fallbackError, url),
-            });
-            return;
-          }
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(`Errore ${response.status}: ${text}`);
         }
 
-        updateStatus({
-          label: "Impossibile contattare il server",
-          ok: false,
-          detail: explainNetworkError(error, url),
-        });
+        showStatus("Fatto!", "success");
+      } catch (error) {
+        console.error(error);
+        showStatus("Errore di connessione", "error");
       } finally {
         setLoading(false);
       }
     }
 
-    function copyCurl(action) {
-      const url = getEndpoint(action);
-      const token = tokenInput.value.trim();
-      const command = [
-        "curl",
-        "-X POST",
-        `"${url}"`,
-        "-H \"Content-Type: application/json\"",
-        token ? `-H \"Authorization: ${token}\"` : "",
-        "-d \"{}\"",
-      ]
-        .filter(Boolean)
-        .join(" ");
-
-      navigator.clipboard
-        .writeText(command)
-        .then(() => {
-          updateStatus({
-            label: "Comando curl copiato",
-            ok: true,
-            detail: "Incolla nel terminale o in Power Automate per replicare la chiamata che funziona.",
-          });
-        })
-        .catch(() => {
-          updateStatus({
-            label: "Impossibile copiare",
-            ok: false,
-            detail: "Il browser ha bloccato l’accesso alla clipboard: copia il comando manualmente.",
-          });
-        });
-    }
-
     btnOn.addEventListener("click", () => sendCommand("on"));
     btnOff.addEventListener("click", () => sendCommand("off"));
-    btnCurl.addEventListener("click", () => copyCurl("on"));
   </script>
 </body>
 
