@@ -435,13 +435,19 @@
 
     // Momentary Switch Logic
     function addMomentarySwitch(btn, actionOn, actionOff) {
+      let isPressed = false;
+
       const start = (e) => {
         e.preventDefault();
+        isPressed = true;
         sendCommand(actionOn);
       };
       const end = (e) => {
         e.preventDefault();
-        sendCommand(actionOff);
+        if (isPressed) {
+          isPressed = false;
+          sendCommand(actionOff);
+        }
       };
 
       btn.addEventListener("mousedown", start);
