@@ -150,6 +150,7 @@
         <option value="email">Email</option>
         <option value="high">HighImportance</option>
         <option value="msg">NewMessageInChannel</option>
+        <option value="meeting">Meeting</option>
       </select>
     </div>
 
@@ -167,6 +168,7 @@
       endpointEmail: "https://raspberrypi.taild4c19b.ts.net/email",
       endpointHigh: "https://raspberrypi.taild4c19b.ts.net/HighImportance",
       endpointMsg: "https://raspberrypi.taild4c19b.ts.net/NewMessageInChannel",
+      endpointMeeting: "https://raspberrypi.taild4c19b.ts.net/meeting",
       token: "Bearer dario-raspi-led-2025-super-token-9fA3k!"
     };
 
@@ -202,6 +204,7 @@
       else if (action === "email") url = CONFIG.endpointEmail;
       else if (action === "high") url = CONFIG.endpointHigh;
       else if (action === "msg") url = CONFIG.endpointMsg;
+      else if (action === "meeting") url = CONFIG.endpointMeeting;
 
       setLoading(true);
       showStatus("Invio...", "neutral");
