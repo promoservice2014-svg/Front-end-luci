@@ -172,6 +172,25 @@
       `;
     }
 
+    function explainNetworkError(error, url) {
+      const message = error?.message || "Errore sconosciuto";
+      const target = new URL(url);
+
+      if (message.includes("Failed to fetch") || message.includes("NetworkError")) {
+        return [
+          "La richiesta è stata bloccata dal browser.",
+          "Se con curl funziona, probabilmente manca il CORS sull’endpoint o l’OPTIONS non risponde.",
+          `Aggiungi gli header CORS sul server (${target.origin}) oppure passa da un proxy/reverse-proxy che li esponga.`,
+        ].join(" ");
+      }
+
+      if (message.toLowerCase().includes("certificate")) {
+        return "Certificato HTTPS non valido per il browser: verifica TLS o aggiungi un proxy con certificato attendibile.";
+      }
+
+      return `Errore di rete: ${message}`;
+    }
+
     async function sendCommand(action) {
       const url = ENDPOINTS[action];
       setLoading(true);
@@ -194,10 +213,11 @@
           detail: `${response.status} ${response.statusText} — ${text || "nessun corpo restituito"}`,
         });
       } catch (error) {
+        console.error("Errore durante la chiamata al Raspberry Pi", error);
         updateStatus({
           label: "Impossibile contattare il server",
           ok: false,
-          detail: error?.message || "Errore sconosciuto",
+          detail: explainNetworkError(error, url),
         });
       } finally {
         setLoading(false);
