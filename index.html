@@ -189,69 +189,79 @@
     </div>
   </div>
 
-  <div id="app-content"
-    style="display: none; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+  <section class="card" style="width: 100%; max-width: 600px;">
+    <h1>On Mouse Up (Hover)</h1>
+    <div class="hover-row">
+      <div class="hover-bulb" id="hov-1" title="Luce 1">🌑</div>
+      <div class="hover-bulb" id="hov-2" title="Luce 2">🌑</div>
+      <div class="hover-bulb" id="hov-3" title="Luce 3">🌑</div>
+      <div class="hover-bulb" id="hov-4" title="Luce 4">🌑</div>
+      <div class="hover-bulb" id="hov-5" title="Luce 5">🌑</div>
+    </div>
+    <div class="status" style="font-size: 0.8rem; margin-top: 0.5rem;">Passa il mouse sopra per accendere</div>
+  </section>
 
-    <div id="app-content"
-      style="display: none; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
-
-      <section class="card" style="width: 100%; max-width: 600px;">
-        <h1>On Mouse Up (Hover)</h1>
-        <div class="hover-row">
-          <div class="hover-bulb" id="hov-1" title="Luce 1">🌑</div>
-          <div class="hover-bulb" id="hov-2" title="Luce 2">🌑</div>
-          <div class="hover-bulb" id="hov-3" title="Luce 3">🌑</div>
-          <div class="hover-bulb" id="hov-4" title="Luce 4">🌑</div>
-          <div class="hover-bulb" id="hov-5" title="Luce 5">🌑</div>
-        </div>
-        <div class="status" style="font-size: 0.8rem; margin-top: 0.5rem;">Passa il mouse sopra per accendere</div>
-      </section>
-
-      <div id="lights-row">
-        <main class="card">
-          <h1>Luce 1</h1>
-          <div class="actions">
-            <button class="btn-on" id="btn-on">🟢 ON</button>
-            <button class="btn-off" id="btn-off">🔴 OFF</button>
-          </div>
-        </main>
-
-        <section class="card">
-          <h1>Luce 2</h1>
-          <div class="actions">
-            <button class="btn-on" id="btn-on-2">🟢 ON</button>
-            <button class="btn-off" id="btn-off-2">🔴 OFF</button>
-          </div>
-        </section>
-
-        <section class="card">
-          <h1>Luce 3</h1>
-          <div class="actions">
-            <button class="btn-on" id="btn-on-3">🟢 ON</button>
-            <button class="btn-off" id="btn-off-3">🔴 OFF</button>
-          </div>
-        </section>
-
-        <section class="card">
-          <h1>On Press Luce 4</h1>
-          <div class="actions single">
-            <button class="btn-blink" id="btn-press-4">👆 PREMI</button>
-          </div>
-        </section>
-
-        <section class="card">
-          <h1>On Press Luce 5</h1>
-          <div class="actions single">
-            <button class="btn-blink" id="btn-press-5">👆 PREMI</button>
-          </div>
-        </section>
+  <div id="lights-row">
+    <main class="card">
+      <h1>Luce 1</h1>
+      <div class="actions">
+        <button class="btn-on" id="btn-on">🟢 ON</button>
+        <button class="btn-off" id="btn-off">🔴 OFF</button>
       </div>
+    </main>
 
-      <section class="card">
-        <h1>Test D&I</h1>
+    <section class="card">
+      <h1>Luce 2</h1>
+      <div class="actions">
+        <button class="btn-on" id="btn-on-2">🟢 ON</button>
+        <button class="btn-off" id="btn-off-2">🔴 OFF</button>
+      </div>
+    </section>
 
-        <div style="margin-bottom: 1rem;">
-          <select id="blink-selector" style="
+    <section class="card">
+      <h1>Luce 3</h1>
+      <div class="actions">
+        <button class="btn-on" id="btn-on-3">🟢 ON</button>
+        <button class="btn-off" id="btn-off-3">🔴 OFF</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h1>Luce 4</h1>
+      <div class="actions">
+        <button class="btn-on" id="btn-on-4">🟢 ON</button>
+        <button class="btn-off" id="btn-off-4">🔴 OFF</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h1>Luce 5</h1>
+      <div class="actions">
+        <button class="btn-on" id="btn-on-5">🟢 ON</button>
+        <button class="btn-off" id="btn-off-5">🔴 OFF</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h1>On Press Luce 4</h1>
+      <div class="actions single">
+        <button class="btn-blink" id="btn-press-4">👆 PREMI</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h1>On Press Luce 5</h1>
+      <div class="actions single">
+        <button class="btn-blink" id="btn-press-5">👆 PREMI</button>
+      </div>
+    </section>
+  </div>
+
+  <section class="card">
+    <h1>Test D&I</h1>
+
+    <div style="margin-bottom: 1rem;">
+      <select id="blink-selector" style="
             width: 100%;
             padding: 0.8rem;
             border-radius: 12px;
@@ -261,209 +271,221 @@
             font-size: 1rem;
             outline: none;
         ">
-            <option value="email">Email</option>
-            <option value="high">HighImportance</option>
-            <option value="msg">NewMessageInChannel</option>
-            <option value="meeting">Meeting</option>
-          </select>
-        </div>
-
-        <div class="actions single">
-          <button class="btn-blink" id="btn-blink">🚨 Blink</button>
-        </div>
-      </section>
-
-      <div class="status" id="status"></div>
+        <option value="email">Email</option>
+        <option value="high">HighImportance</option>
+        <option value="msg">NewMessageInChannel</option>
+        <option value="meeting">Meeting</option>
+      </select>
     </div>
 
-    <script>
-      const CONFIG = {
-        endpointOn: "https://raspberrypi.taild4c19b.ts.net/accendi_luce",
-        endpointOff: "https://raspberrypi.taild4c19b.ts.net/spegni_luce",
-        endpointOn2: "https://raspberrypi.taild4c19b.ts.net/accendi_luce2",
-        endpointOff2: "https://raspberrypi.taild4c19b.ts.net/spegni_luce2",
-        endpointOn3: "https://raspberrypi.taild4c19b.ts.net/accendi_luce3",
-        endpointOff3: "https://raspberrypi.taild4c19b.ts.net/spegni_luce3",
-        endpointOn4: "https://raspberrypi.taild4c19b.ts.net/accendi_luce4",
-        endpointOff4: "https://raspberrypi.taild4c19b.ts.net/spegni_luce4",
-        endpointOn5: "https://raspberrypi.taild4c19b.ts.net/accendi_luce5",
-        endpointOff5: "https://raspberrypi.taild4c19b.ts.net/spegni_luce5",
-        endpointEmail: "https://raspberrypi.taild4c19b.ts.net/email",
-        endpointHigh: "https://raspberrypi.taild4c19b.ts.net/HighImportance",
-        endpointMsg: "https://raspberrypi.taild4c19b.ts.net/NewMessageInChannel",
-        endpointMeeting: "https://raspberrypi.taild4c19b.ts.net/meeting",
-        token: "Bearer dario-raspi-led-2025-super-token-9fA3k!"
+    <div class="actions single">
+      <button class="btn-blink" id="btn-blink">🚨 Blink</button>
+    </div>
+  </section>
+
+  <div class="status" id="status"></div>
+  </div>
+
+  <script>
+    const CONFIG = {
+      endpointOn: "https://raspberrypi.taild4c19b.ts.net/accendi_luce",
+      endpointOff: "https://raspberrypi.taild4c19b.ts.net/spegni_luce",
+      endpointOn2: "https://raspberrypi.taild4c19b.ts.net/accendi_luce2",
+      endpointOff2: "https://raspberrypi.taild4c19b.ts.net/spegni_luce2",
+      endpointOn3: "https://raspberrypi.taild4c19b.ts.net/accendi_luce3",
+      endpointOff3: "https://raspberrypi.taild4c19b.ts.net/spegni_luce3",
+      endpointOn4: "https://raspberrypi.taild4c19b.ts.net/accendi_luce4",
+      endpointOff4: "https://raspberrypi.taild4c19b.ts.net/spegni_luce4",
+      endpointOn5: "https://raspberrypi.taild4c19b.ts.net/accendi_luce5",
+      endpointOff5: "https://raspberrypi.taild4c19b.ts.net/spegni_luce5",
+      endpointEmail: "https://raspberrypi.taild4c19b.ts.net/email",
+      endpointHigh: "https://raspberrypi.taild4c19b.ts.net/HighImportance",
+      endpointMsg: "https://raspberrypi.taild4c19b.ts.net/NewMessageInChannel",
+      endpointMeeting: "https://raspberrypi.taild4c19b.ts.net/meeting",
+      token: "Bearer dario-raspi-led-2025-super-token-9fA3k!"
+    };
+
+    const statusBox = document.getElementById("status");
+    const btnOn = document.getElementById("btn-on");
+    const btnOff = document.getElementById("btn-off");
+    const btnOn2 = document.getElementById("btn-on-2");
+    const btnOff2 = document.getElementById("btn-off-2");
+    const btnOn3 = document.getElementById("btn-on-3");
+    const btnOff3 = document.getElementById("btn-off-3");
+    const btnOn4 = document.getElementById("btn-on-4");
+    const btnOff4 = document.getElementById("btn-off-4");
+    const btnOn5 = document.getElementById("btn-on-5");
+    const btnOff5 = document.getElementById("btn-off-5");
+    const btnPress4 = document.getElementById("btn-press-4");
+    const btnPress5 = document.getElementById("btn-press-5");
+    const hov1 = document.getElementById("hov-1");
+    const hov2 = document.getElementById("hov-2");
+    const hov3 = document.getElementById("hov-3");
+    const hov4 = document.getElementById("hov-4");
+    const hov5 = document.getElementById("hov-5");
+    const btnBlink = document.getElementById("btn-blink");
+    const blinkSelector = document.getElementById("blink-selector");
+
+    function setLoading(isLoading) {
+      btnOn.disabled = isLoading;
+      btnOff.disabled = isLoading;
+      btnOn2.disabled = isLoading;
+      btnOff2.disabled = isLoading;
+      btnOn3.disabled = isLoading;
+      btnOff3.disabled = isLoading;
+      btnOn4.disabled = isLoading;
+      btnOff4.disabled = isLoading;
+      btnOn5.disabled = isLoading;
+      btnOff5.disabled = isLoading;
+      // Momentary buttons generally stay active to release
+      btnBlink.disabled = isLoading;
+      blinkSelector.disabled = isLoading;
+    }
+
+    function showStatus(message, type = "neutral") {
+      statusBox.textContent = message;
+      statusBox.className = "status " + type;
+
+      if (type !== "neutral") {
+        setTimeout(() => {
+          statusBox.textContent = "";
+          statusBox.className = "status";
+        }, 3000);
+      }
+    }
+
+    async function sendCommand(action) {
+      let url;
+      if (action === "on") url = CONFIG.endpointOn;
+      else if (action === "off") url = CONFIG.endpointOff;
+      else if (action === "on2") url = CONFIG.endpointOn2;
+      else if (action === "off2") url = CONFIG.endpointOff2;
+      else if (action === "on3") url = CONFIG.endpointOn3;
+      else if (action === "off3") url = CONFIG.endpointOff3;
+      else if (action === "on4") url = CONFIG.endpointOn4;
+      else if (action === "off4") url = CONFIG.endpointOff4;
+      else if (action === "on5") url = CONFIG.endpointOn5;
+      else if (action === "off5") url = CONFIG.endpointOff5;
+      else if (action === "email") url = CONFIG.endpointEmail;
+      else if (action === "high") url = CONFIG.endpointHigh;
+      else if (action === "msg") url = CONFIG.endpointMsg;
+      else if (action === "meeting") url = CONFIG.endpointMeeting;
+
+      setLoading(true);
+      showStatus("Invio...", "neutral");
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Authorization": CONFIG.token,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({})
+        });
+
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(`Errore ${response.status}: ${text}`);
+        }
+
+        // Removed "Fatto!" feedback as requested
+        showStatus("");
+      } catch (error) {
+        console.error(error);
+        showStatus("Errore di connessione", "error");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    btnOn.addEventListener("click", () => sendCommand("on"));
+    btnOff.addEventListener("click", () => sendCommand("off"));
+    btnOn2.addEventListener("click", () => sendCommand("on2"));
+    btnOff2.addEventListener("click", () => sendCommand("off2"));
+    btnOn3.addEventListener("click", () => sendCommand("on3"));
+    btnOff3.addEventListener("click", () => sendCommand("off3"));
+    btnOn4.addEventListener("click", () => sendCommand("on4"));
+    btnOff4.addEventListener("click", () => sendCommand("off4"));
+    btnOn5.addEventListener("click", () => sendCommand("on5"));
+    btnOff5.addEventListener("click", () => sendCommand("off5"));
+
+    // Momentary Switch Logic
+    function addMomentarySwitch(btn, actionOn, actionOff) {
+      const start = (e) => {
+        e.preventDefault();
+        sendCommand(actionOn);
+      };
+      const end = (e) => {
+        e.preventDefault();
+        sendCommand(actionOff);
       };
 
-      const statusBox = document.getElementById("status");
-      const btnOn = document.getElementById("btn-on");
-      const btnOff = document.getElementById("btn-off");
-      const btnOn2 = document.getElementById("btn-on-2");
-      const btnOff2 = document.getElementById("btn-off-2");
-      const btnOn3 = document.getElementById("btn-on-3");
-      const btnOff3 = document.getElementById("btn-off-3");
-      const btnPress4 = document.getElementById("btn-press-4");
-      const btnPress5 = document.getElementById("btn-press-5");
-      const hov1 = document.getElementById("hov-1");
-      const hov2 = document.getElementById("hov-2");
-      const hov3 = document.getElementById("hov-3");
-      const hov4 = document.getElementById("hov-4");
-      const hov5 = document.getElementById("hov-5");
-      const btnBlink = document.getElementById("btn-blink");
-      const blinkSelector = document.getElementById("blink-selector");
+      btn.addEventListener("mousedown", start);
+      btn.addEventListener("mouseup", end);
+      btn.addEventListener("mouseleave", end);
+      btn.addEventListener("touchstart", start);
+      btn.addEventListener("touchend", end);
+    }
 
-      function setLoading(isLoading) {
-        btnOn.disabled = isLoading;
-        btnOff.disabled = isLoading;
-        btnOn2.disabled = isLoading;
-        btnOff2.disabled = isLoading;
-        btnOn3.disabled = isLoading;
-        btnOff3.disabled = isLoading;
-        // Momentary buttons generally stay active to release
-        btnBlink.disabled = isLoading;
-        blinkSelector.disabled = isLoading;
+    addMomentarySwitch(btnPress4, "on4", "off4");
+    addMomentarySwitch(btnPress5, "on5", "off5");
+
+    // Hover Switch Logic
+    function addHoverSwitch(el, actionOn, actionOff) {
+      const on = () => {
+        el.textContent = "💡";
+        sendCommand(actionOn);
+      };
+      const off = () => {
+        el.textContent = "🌑";
+        sendCommand(actionOff);
+      };
+
+      el.addEventListener("mouseenter", on);
+      el.addEventListener("mouseleave", off);
+      // Mobile support (touch)
+      el.addEventListener("touchstart", (e) => { e.preventDefault(); on(); });
+      el.addEventListener("touchend", (e) => { e.preventDefault(); off(); });
+    }
+
+    addHoverSwitch(hov1, "on", "off");
+    addHoverSwitch(hov2, "on2", "off2");
+    addHoverSwitch(hov3, "on3", "off3");
+    addHoverSwitch(hov4, "on4", "off4");
+    addHoverSwitch(hov5, "on5", "off5");
+
+    btnBlink.addEventListener("click", () => {
+      const selection = blinkSelector.value;
+      sendCommand(selection);
+    });
+
+    // Login Logic
+    const loginOverlay = document.getElementById("login-overlay");
+    const appContent = document.getElementById("app-content");
+    const btnLogin = document.getElementById("btn-login");
+    const userInput = document.getElementById("username");
+    const passInput = document.getElementById("password");
+    const loginError = document.getElementById("login-error");
+
+    function checkLogin() {
+      const u = userInput.value;
+      const p = passInput.value;
+
+      if (u === "admin" && p === "luci2025") {
+        loginOverlay.style.display = "none";
+        appContent.style.display = "flex";
+      } else {
+        loginError.textContent = "Credenziali errate";
+        setTimeout(() => loginError.textContent = "", 2000);
       }
+    }
 
-      function showStatus(message, type = "neutral") {
-        statusBox.textContent = message;
-        statusBox.className = "status " + type;
-
-        if (type !== "neutral") {
-          setTimeout(() => {
-            statusBox.textContent = "";
-            statusBox.className = "status";
-          }, 3000);
-        }
-      }
-
-      async function sendCommand(action) {
-        let url;
-        if (action === "on") url = CONFIG.endpointOn;
-        else if (action === "off") url = CONFIG.endpointOff;
-        else if (action === "on2") url = CONFIG.endpointOn2;
-        else if (action === "off2") url = CONFIG.endpointOff2;
-        else if (action === "on3") url = CONFIG.endpointOn3;
-        else if (action === "off3") url = CONFIG.endpointOff3;
-        else if (action === "on4") url = CONFIG.endpointOn4;
-        else if (action === "off4") url = CONFIG.endpointOff4;
-        else if (action === "on5") url = CONFIG.endpointOn5;
-        else if (action === "off5") url = CONFIG.endpointOff5;
-        else if (action === "email") url = CONFIG.endpointEmail;
-        else if (action === "high") url = CONFIG.endpointHigh;
-        else if (action === "msg") url = CONFIG.endpointMsg;
-        else if (action === "meeting") url = CONFIG.endpointMeeting;
-
-        setLoading(true);
-        showStatus("Invio...", "neutral");
-
-        try {
-          const response = await fetch(url, {
-            method: "POST",
-            headers: {
-              "Authorization": CONFIG.token,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({})
-          });
-
-          if (!response.ok) {
-            const text = await response.text();
-            throw new Error(`Errore ${response.status}: ${text}`);
-          }
-
-          // Removed "Fatto!" feedback as requested
-          showStatus("");
-        } catch (error) {
-          console.error(error);
-          showStatus("Errore di connessione", "error");
-        } finally {
-          setLoading(false);
-        }
-      }
-
-      btnOn.addEventListener("click", () => sendCommand("on"));
-      btnOff.addEventListener("click", () => sendCommand("off"));
-      btnOn2.addEventListener("click", () => sendCommand("on2"));
-      btnOff2.addEventListener("click", () => sendCommand("off2"));
-      btnOn3.addEventListener("click", () => sendCommand("on3"));
-      btnOff3.addEventListener("click", () => sendCommand("off3"));
-
-      // Momentary Switch Logic
-      function addMomentarySwitch(btn, actionOn, actionOff) {
-        const start = (e) => {
-          e.preventDefault();
-          sendCommand(actionOn);
-        };
-        const end = (e) => {
-          e.preventDefault();
-          sendCommand(actionOff);
-        };
-
-        btn.addEventListener("mousedown", start);
-        btn.addEventListener("mouseup", end);
-        btn.addEventListener("mouseleave", end);
-        btn.addEventListener("touchstart", start);
-        btn.addEventListener("touchend", end);
-      }
-
-      addMomentarySwitch(btnPress4, "on4", "off4");
-      addMomentarySwitch(btnPress5, "on5", "off5");
-
-      // Hover Switch Logic
-      function addHoverSwitch(el, actionOn, actionOff) {
-        const on = () => {
-          el.textContent = "💡";
-          sendCommand(actionOn);
-        };
-        const off = () => {
-          el.textContent = "🌑";
-          sendCommand(actionOff);
-        };
-
-        el.addEventListener("mouseenter", on);
-        el.addEventListener("mouseleave", off);
-        // Mobile support (touch)
-        el.addEventListener("touchstart", (e) => { e.preventDefault(); on(); });
-        el.addEventListener("touchend", (e) => { e.preventDefault(); off(); });
-      }
-
-      addHoverSwitch(hov1, "on", "off");
-      addHoverSwitch(hov2, "on2", "off2");
-      addHoverSwitch(hov3, "on3", "off3");
-      addHoverSwitch(hov4, "on4", "off4");
-      addHoverSwitch(hov5, "on5", "off5");
-
-      btnBlink.addEventListener("click", () => {
-        const selection = blinkSelector.value;
-        sendCommand(selection);
-      });
-
-      // Login Logic
-      const loginOverlay = document.getElementById("login-overlay");
-      const appContent = document.getElementById("app-content");
-      const btnLogin = document.getElementById("btn-login");
-      const userInput = document.getElementById("username");
-      const passInput = document.getElementById("password");
-      const loginError = document.getElementById("login-error");
-
-      function checkLogin() {
-        const u = userInput.value;
-        const p = passInput.value;
-
-        if (u === "admin" && p === "luci2025") {
-          loginOverlay.style.display = "none";
-          appContent.style.display = "flex";
-        } else {
-          loginError.textContent = "Credenziali errate";
-          setTimeout(() => loginError.textContent = "", 2000);
-        }
-      }
-
-      btnLogin.addEventListener("click", checkLogin);
-      passInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") checkLogin();
-      });
-    </script>
+    btnLogin.addEventListener("click", checkLogin);
+    passInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") checkLogin();
+    });
+  </script>
 </body>
 
 </html>
