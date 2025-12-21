@@ -56,6 +56,33 @@
       margin-bottom: 1rem;
     }
 
+    .helpers {
+      margin: 0 0 1rem;
+      display: grid;
+      gap: 0.45rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .toggle {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .toggle input {
+      width: 1rem;
+      height: 1rem;
+      accent-color: var(--accent);
+    }
+
+    .hint {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
     button {
       appearance: none;
       border: none;
@@ -140,6 +167,20 @@
       <button class="btn-on" id="btn-on">Accendi luce</button>
       <button class="btn-off" id="btn-off">Spegni luce</button>
     </div>
+    <div class="helpers">
+      <label class="toggle">
+        <input type="checkbox" id="no-cors-toggle" />
+        <span>
+          Se il browser blocca la chiamata, attiva l’invio in modalità <code>no-cors</code>.
+          La richiesta parte comunque ma il browser non potrà leggere la risposta.
+        </span>
+      </label>
+      <p class="hint">
+        Se continui a vedere errori, abilita gli header CORS sull’endpoint o passa da un proxy/reverse proxy
+        che li esponga (ad es. Nginx o Caddy con <code>Access-Control-Allow-Origin</code> e risposta all’OPTIONS).
+        In modalità <code>no-cors</code> il browser non può inviare header come <code>Authorization</code>, quindi usa un proxy che li aggiunga lato server.
+      </p>
+    </div>
     <section class="status" id="status">
       <div><strong>Stato:</strong> In attesa di un’azione.</div>
       <div><strong>Ultimo aggiornamento:</strong> —</div>
@@ -157,6 +198,7 @@
     const statusBox = document.getElementById("status");
     const btnOn = document.getElementById("btn-on");
     const btnOff = document.getElementById("btn-off");
+    const noCorsToggle = document.getElementById("no-cors-toggle");
 
     function setLoading(isLoading) {
       btnOn.disabled = isLoading;
@@ -193,18 +235,32 @@
 
     async function sendCommand(action) {
       const url = ENDPOINTS[action];
+      const useNoCors = noCorsToggle?.checked;
       setLoading(true);
       updateStatus({
         label: "Invio richiesta...",
         ok: true,
-        detail: `Richiesta POST verso ${url}`,
+        detail: `Richiesta POST verso ${url}${useNoCors ? " (modalità no-cors)" : ""}`,
       });
 
       try {
-        const response = await fetch(url, {
+        const requestOptions = {
           method: "POST",
-          headers: { Authorization: TOKEN },
-        });
+          headers: useNoCors ? undefined : { Authorization: TOKEN },
+          mode: useNoCors ? "no-cors" : "cors",
+        };
+
+        const response = await fetch(url, requestOptions);
+
+        if (useNoCors && response.type === "opaque") {
+          updateStatus({
+            label: "Richiesta inviata (no-cors)",
+            ok: true,
+            detail:
+              "La richiesta è partita ma il browser non può leggere la risposta. Verifica il risultato direttamente sul dispositivo o sul proxy.",
+          });
+          return;
+        }
 
         const text = await response.text();
         updateStatus({
