@@ -51,8 +51,8 @@
 
     .actions {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+      gap: 0.5rem;
     }
 
     .actions.single {
@@ -207,6 +207,7 @@
       <div class="actions">
         <button class="btn-on" id="btn-on">🟢 ON</button>
         <button class="btn-off" id="btn-off">🔴 OFF</button>
+        <button class="btn-blink" id="btn-press-1">👆 PREMI</button>
       </div>
     </main>
 
@@ -215,6 +216,7 @@
       <div class="actions">
         <button class="btn-on" id="btn-on-2">🟢 ON</button>
         <button class="btn-off" id="btn-off-2">🔴 OFF</button>
+        <button class="btn-blink" id="btn-press-2">👆 PREMI</button>
       </div>
     </section>
 
@@ -223,6 +225,7 @@
       <div class="actions">
         <button class="btn-on" id="btn-on-3">🟢 ON</button>
         <button class="btn-off" id="btn-off-3">🔴 OFF</button>
+        <button class="btn-blink" id="btn-press-3">👆 PREMI</button>
       </div>
     </section>
 
@@ -231,6 +234,7 @@
       <div class="actions">
         <button class="btn-on" id="btn-on-4">🟢 ON</button>
         <button class="btn-off" id="btn-off-4">🔴 OFF</button>
+        <button class="btn-blink" id="btn-press-4">👆 PREMI</button>
       </div>
     </section>
 
@@ -239,42 +243,22 @@
       <div class="actions">
         <button class="btn-on" id="btn-on-5">🟢 ON</button>
         <button class="btn-off" id="btn-off-5">🔴 OFF</button>
+        <button class="btn-blink" id="btn-press-5">👆 PREMI</button>
       </div>
     </section>
+  </div>
 
-    <div class="hover-row" style="width: 100%; flex-wrap: wrap;">
-      <section class="card">
-        <h1>On Press Luce 4</h1>
-        <div class="actions single">
-          <button class="btn-blink" id="btn-press-4">👆 PREMI</button>
-        </div>
-      </section>
-
-      <section class="card">
-        <h1>On Press Luce 5</h1>
-        <div class="actions single">
-          <button class="btn-blink" id="btn-press-5">👆 PREMI</button>
-        </div>
-      </section>
-    </div>
-
-    <h1 style="margin-top: 2rem;">Area Buzzer</h1>
-    <div class="hover-row" style="width: 100%; flex-wrap: wrap;">
-      <section class="card">
-        <h1>Buzzer 1</h1>
-        <div class="actions">
-          <button class="btn-on" id="btn-buzz-on">🟢 ON</button>
-          <button class="btn-off" id="btn-buzz-off">🔴 OFF</button>
-        </div>
-      </section>
-
-      <section class="card">
-        <h1>On Press Buzzer</h1>
-        <div class="actions single">
-          <button class="btn-blink" id="btn-buzz-press">👆 PREMI</button>
-        </div>
-      </section>
-    </div>
+  <h1 style="margin-top: 2rem;">Area Buzzer</h1>
+  <div id="lights-row">
+    <section class="card">
+      <h1>Buzzer 1</h1>
+      <div class="actions">
+        <button class="btn-on" id="btn-buzz-on">🟢 ON</button>
+        <button class="btn-off" id="btn-buzz-off">🔴 OFF</button>
+        <button class="btn-blink" id="btn-buzz-press">👆 PREMI</button>
+      </div>
+    </section>
+  </div>
   </div>
 
   <section class="card">
@@ -338,6 +322,9 @@
     const btnOff4 = document.getElementById("btn-off-4");
     const btnOn5 = document.getElementById("btn-on-5");
     const btnOff5 = document.getElementById("btn-off-5");
+    const btnPress1 = document.getElementById("btn-press-1");
+    const btnPress2 = document.getElementById("btn-press-2");
+    const btnPress3 = document.getElementById("btn-press-3");
     const btnPress4 = document.getElementById("btn-press-4");
     const btnPress5 = document.getElementById("btn-press-5");
     const btnBuzzOn = document.getElementById("btn-buzz-on");
@@ -362,6 +349,11 @@
       btnOff4.disabled = isLoading;
       btnOn5.disabled = isLoading;
       btnOff5.disabled = isLoading;
+      btnPress1.disabled = isLoading;
+      btnPress2.disabled = isLoading;
+      btnPress3.disabled = isLoading;
+      btnPress4.disabled = isLoading;
+      btnPress5.disabled = isLoading;
       btnBuzzOn.disabled = isLoading;
       btnBuzzOff.disabled = isLoading;
       // Momentary buttons generally stay active to release
@@ -459,6 +451,9 @@
       btn.addEventListener("touchend", end);
     }
 
+    addMomentarySwitch(btnPress1, "on", "off");
+    addMomentarySwitch(btnPress2, "on2", "off2");
+    addMomentarySwitch(btnPress3, "on3", "off3");
     addMomentarySwitch(btnPress4, "on4", "off4");
     addMomentarySwitch(btnPress5, "on5", "off5");
     addMomentarySwitch(btnBuzzPress, "buzzOn", "buzzOff");
