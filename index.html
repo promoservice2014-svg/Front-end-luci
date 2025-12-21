@@ -136,7 +136,14 @@
   <section class="card">
     <h1>Test Email</h1>
     <div class="actions single">
-      <button class="btn-blink" id="btn-blink">Blink</button>
+      <button class="btn-blink" id="btn-blink-email">Blink</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h1>HighImportance</h1>
+    <div class="actions single">
+      <button class="btn-blink" id="btn-blink-high">Blink</button>
     </div>
   </section>
 
@@ -147,18 +154,21 @@
       endpointOn: "https://raspberrypi.taild4c19b.ts.net/accendi_luce",
       endpointOff: "https://raspberrypi.taild4c19b.ts.net/spegni_luce",
       endpointEmail: "https://raspberrypi.taild4c19b.ts.net/email",
+      endpointHigh: "https://raspberrypi.taild4c19b.ts.net/HighImportance",
       token: "Bearer dario-raspi-led-2025-super-token-9fA3k!"
     };
 
     const statusBox = document.getElementById("status");
     const btnOn = document.getElementById("btn-on");
     const btnOff = document.getElementById("btn-off");
-    const btnBlink = document.getElementById("btn-blink");
+    const btnBlinkEmail = document.getElementById("btn-blink-email");
+    const btnBlinkHigh = document.getElementById("btn-blink-high");
 
     function setLoading(isLoading) {
       btnOn.disabled = isLoading;
       btnOff.disabled = isLoading;
-      btnBlink.disabled = isLoading;
+      btnBlinkEmail.disabled = isLoading;
+      btnBlinkHigh.disabled = isLoading;
     }
 
     function showStatus(message, type = "neutral") {
@@ -178,6 +188,7 @@
       if (action === "on") url = CONFIG.endpointOn;
       else if (action === "off") url = CONFIG.endpointOff;
       else if (action === "email") url = CONFIG.endpointEmail;
+      else if (action === "high") url = CONFIG.endpointHigh;
 
       setLoading(true);
       showStatus("Invio...", "neutral");
@@ -208,7 +219,8 @@
 
     btnOn.addEventListener("click", () => sendCommand("on"));
     btnOff.addEventListener("click", () => sendCommand("off"));
-    btnBlink.addEventListener("click", () => sendCommand("email"));
+    btnBlinkEmail.addEventListener("click", () => sendCommand("email"));
+    btnBlinkHigh.addEventListener("click", () => sendCommand("high"));
   </script>
 </body>
 
