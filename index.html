@@ -36,9 +36,9 @@
       width: min(320px, 100%);
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 16px;
       box-shadow: var(--shadow);
-      padding: 2rem;
+      padding: 1.5rem;
       text-align: center;
     }
 
@@ -62,9 +62,9 @@
     button {
       appearance: none;
       border: none;
-      border-radius: 16px;
-      padding: 1.2rem 1rem;
-      font-size: 1.1rem;
+      border-radius: 12px;
+      padding: 0.8rem 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: #0b0f13;
       cursor: pointer;
@@ -146,6 +146,16 @@
     input:focus {
       border-color: var(--accent);
     }
+
+    #lights-row {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      width: 100%;
+      max-width: 1000px;
+    }
   </style>
 </head>
 
@@ -162,30 +172,32 @@
 
   <div id="app-content"
     style="display: none; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
-    <main class="card">
-      <h1>Luce 1</h1>
 
-      <div class="actions">
-        <button class="btn-on" id="btn-on">ON</button>
-        <button class="btn-off" id="btn-off">OFF</button>
-      </div>
-    </main>
+    <div id="lights-row">
+      <main class="card">
+        <h1>Luce 1</h1>
+        <div class="actions">
+          <button class="btn-on" id="btn-on">🟢 ON</button>
+          <button class="btn-off" id="btn-off">🔴 OFF</button>
+        </div>
+      </main>
 
-    <section class="card">
-      <h1>Luce 2</h1>
-      <div class="actions">
-        <button class="btn-on" id="btn-on-2">ON</button>
-        <button class="btn-off" id="btn-off-2">OFF</button>
-      </div>
-    </section>
+      <section class="card">
+        <h1>Luce 2</h1>
+        <div class="actions">
+          <button class="btn-on" id="btn-on-2">🟢 ON</button>
+          <button class="btn-off" id="btn-off-2">🔴 OFF</button>
+        </div>
+      </section>
 
-    <section class="card">
-      <h1>Luce 3</h1>
-      <div class="actions">
-        <button class="btn-on" id="btn-on-3">ON</button>
-        <button class="btn-off" id="btn-off-3">OFF</button>
-      </div>
-    </section>
+      <section class="card">
+        <h1>Luce 3</h1>
+        <div class="actions">
+          <button class="btn-on" id="btn-on-3">🟢 ON</button>
+          <button class="btn-off" id="btn-off-3">🔴 OFF</button>
+        </div>
+      </section>
+    </div>
 
     <section class="card">
       <h1>Test D&I</h1>
@@ -209,7 +221,7 @@
       </div>
 
       <div class="actions single">
-        <button class="btn-blink" id="btn-blink">Blink</button>
+        <button class="btn-blink" id="btn-blink">🚨 Blink</button>
       </div>
     </section>
 
