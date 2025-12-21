@@ -244,9 +244,18 @@
       });
 
       try {
+        const body = JSON.stringify({});
+        const headers = useNoCors
+          ? undefined
+          : {
+              Authorization: TOKEN,
+              "Content-Type": "application/json",
+            };
+
         const requestOptions = {
           method: "POST",
-          headers: useNoCors ? undefined : { Authorization: TOKEN },
+          headers,
+          body,
           mode: useNoCors ? "no-cors" : "cors",
         };
 
@@ -257,7 +266,7 @@
             label: "Richiesta inviata (no-cors)",
             ok: true,
             detail:
-              "La richiesta è partita ma il browser non può leggere la risposta. Verifica il risultato direttamente sul dispositivo o sul proxy.",
+              "La richiesta è partita ma il browser non può leggere la risposta. In no-cors il browser non invia l'header Authorization: usa un proxy che lo aggiunga o abilita il CORS per far accendere la luce.",
           });
           return;
         }
