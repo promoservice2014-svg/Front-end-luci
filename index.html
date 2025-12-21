@@ -134,6 +134,22 @@
   </main>
 
   <section class="card">
+    <h1>Luce 2</h1>
+    <div class="actions">
+      <button class="btn-on" id="btn-on-2">ON</button>
+      <button class="btn-off" id="btn-off-2">OFF</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h1>Luce 3</h1>
+    <div class="actions">
+      <button class="btn-on" id="btn-on-3">ON</button>
+      <button class="btn-off" id="btn-off-3">OFF</button>
+    </div>
+  </section>
+
+  <section class="card">
     <h1>Test D&I</h1>
 
     <div style="margin-bottom: 1rem;">
@@ -165,6 +181,10 @@
     const CONFIG = {
       endpointOn: "https://raspberrypi.taild4c19b.ts.net/accendi_luce",
       endpointOff: "https://raspberrypi.taild4c19b.ts.net/spegni_luce",
+      endpointOn2: "https://raspberrypi.taild4c19b.ts.net/accendi_luce2",
+      endpointOff2: "https://raspberrypi.taild4c19b.ts.net/spegni_luce2",
+      endpointOn3: "https://raspberrypi.taild4c19b.ts.net/accendi_luce3",
+      endpointOff3: "https://raspberrypi.taild4c19b.ts.net/spegni_luce3",
       endpointEmail: "https://raspberrypi.taild4c19b.ts.net/email",
       endpointHigh: "https://raspberrypi.taild4c19b.ts.net/HighImportance",
       endpointMsg: "https://raspberrypi.taild4c19b.ts.net/NewMessageInChannel",
@@ -175,12 +195,20 @@
     const statusBox = document.getElementById("status");
     const btnOn = document.getElementById("btn-on");
     const btnOff = document.getElementById("btn-off");
+    const btnOn2 = document.getElementById("btn-on-2");
+    const btnOff2 = document.getElementById("btn-off-2");
+    const btnOn3 = document.getElementById("btn-on-3");
+    const btnOff3 = document.getElementById("btn-off-3");
     const btnBlink = document.getElementById("btn-blink");
     const blinkSelector = document.getElementById("blink-selector");
 
     function setLoading(isLoading) {
       btnOn.disabled = isLoading;
       btnOff.disabled = isLoading;
+      btnOn2.disabled = isLoading;
+      btnOff2.disabled = isLoading;
+      btnOn3.disabled = isLoading;
+      btnOff3.disabled = isLoading;
       btnBlink.disabled = isLoading;
       blinkSelector.disabled = isLoading;
     }
@@ -201,6 +229,10 @@
       let url;
       if (action === "on") url = CONFIG.endpointOn;
       else if (action === "off") url = CONFIG.endpointOff;
+      else if (action === "on2") url = CONFIG.endpointOn2;
+      else if (action === "off2") url = CONFIG.endpointOff2;
+      else if (action === "on3") url = CONFIG.endpointOn3;
+      else if (action === "off3") url = CONFIG.endpointOff3;
       else if (action === "email") url = CONFIG.endpointEmail;
       else if (action === "high") url = CONFIG.endpointHigh;
       else if (action === "msg") url = CONFIG.endpointMsg;
@@ -235,6 +267,10 @@
 
     btnOn.addEventListener("click", () => sendCommand("on"));
     btnOff.addEventListener("click", () => sendCommand("off"));
+    btnOn2.addEventListener("click", () => sendCommand("on2"));
+    btnOff2.addEventListener("click", () => sendCommand("off2"));
+    btnOn3.addEventListener("click", () => sendCommand("on3"));
+    btnOff3.addEventListener("click", () => sendCommand("off3"));
     btnBlink.addEventListener("click", () => {
       const selection = blinkSelector.value;
       sendCommand(selection);
