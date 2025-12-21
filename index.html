@@ -190,6 +190,14 @@
   </div>
 
   <section class="card" style="width: 100%; max-width: 600px;">
+    <h1>Global Commands</h1>
+    <div class="actions">
+      <button class="btn-on" id="btn-all-on">💡 All Lights ON</button>
+      <button class="btn-off" id="btn-all-off">🌙 All Lights OFF</button>
+    </div>
+  </section>
+
+  <section class="card" style="width: 100%; max-width: 600px;">
     <h1>On Mouse Up (Hover)</h1>
     <div class="hover-row">
       <div class="hover-bulb" id="hov-1" title="Luce 1">🌑</div>
@@ -207,7 +215,7 @@
       <div class="actions">
         <button class="btn-on" id="btn-on">🟢 ON</button>
         <button class="btn-off" id="btn-off">🔴 OFF</button>
-        <button class="btn-blink" id="btn-press-1">👆 PREMI</button>
+        <button class="btn-blink" id="btn-press-1">👆 PRESS</button>
       </div>
     </main>
 
@@ -216,7 +224,7 @@
       <div class="actions">
         <button class="btn-on" id="btn-on-2">🟢 ON</button>
         <button class="btn-off" id="btn-off-2">🔴 OFF</button>
-        <button class="btn-blink" id="btn-press-2">👆 PREMI</button>
+        <button class="btn-blink" id="btn-press-2">👆 PRESS</button>
       </div>
     </section>
 
@@ -225,7 +233,7 @@
       <div class="actions">
         <button class="btn-on" id="btn-on-3">🟢 ON</button>
         <button class="btn-off" id="btn-off-3">🔴 OFF</button>
-        <button class="btn-blink" id="btn-press-3">👆 PREMI</button>
+        <button class="btn-blink" id="btn-press-3">👆 PRESS</button>
       </div>
     </section>
 
@@ -234,7 +242,7 @@
       <div class="actions">
         <button class="btn-on" id="btn-on-4">🟢 ON</button>
         <button class="btn-off" id="btn-off-4">🔴 OFF</button>
-        <button class="btn-blink" id="btn-press-4">👆 PREMI</button>
+        <button class="btn-blink" id="btn-press-4">👆 PRESS</button>
       </div>
     </section>
 
@@ -243,7 +251,7 @@
       <div class="actions">
         <button class="btn-on" id="btn-on-5">🟢 ON</button>
         <button class="btn-off" id="btn-off-5">🔴 OFF</button>
-        <button class="btn-blink" id="btn-press-5">👆 PREMI</button>
+        <button class="btn-blink" id="btn-press-5">👆 PRESS</button>
       </div>
     </section>
   </div>
@@ -255,7 +263,7 @@
       <div class="actions">
         <button class="btn-on" id="btn-buzz-on">🟢 ON</button>
         <button class="btn-off" id="btn-buzz-off">🔴 OFF</button>
-        <button class="btn-blink" id="btn-buzz-press">👆 PREMI</button>
+        <button class="btn-blink" id="btn-buzz-press">👆 PRESS</button>
       </div>
     </section>
   </div>
@@ -337,6 +345,8 @@
     const hov5 = document.getElementById("hov-5");
     const btnBlink = document.getElementById("btn-blink");
     const blinkSelector = document.getElementById("blink-selector");
+    const btnAllOn = document.getElementById("btn-all-on");
+    const btnAllOff = document.getElementById("btn-all-off");
 
     function setLoading(isLoading) {
       btnOn.disabled = isLoading;
@@ -356,6 +366,8 @@
       btnPress5.disabled = isLoading;
       btnBuzzOn.disabled = isLoading;
       btnBuzzOff.disabled = isLoading;
+      btnAllOn.disabled = isLoading;
+      btnAllOff.disabled = isLoading;
       // Momentary buttons generally stay active to release
       btnBlink.disabled = isLoading;
       blinkSelector.disabled = isLoading;
@@ -431,6 +443,45 @@
     btnOff5.addEventListener("click", () => sendCommand("off5"));
     btnBuzzOn.addEventListener("click", () => sendCommand("buzzOn"));
     btnBuzzOff.addEventListener("click", () => sendCommand("buzzOff"));
+    btnAllOn.addEventListener("click", () => controlAllLights("on"));
+    btnAllOff.addEventListener("click", () => controlAllLights("off"));
+
+    async function controlAllLights(type) {
+      const actions = type === "on"
+        ? ["on", "on2", "on3", "on4", "on5"]
+        : ["off", "off2", "off3", "off4", "off5"];
+
+      setLoading(true);
+      try {
+        for (const action of actions) {
+          let url;
+          if (action === "on") url = CONFIG.endpointOn;
+          else if (action === "off") url = CONFIG.endpointOff;
+          else if (action === "on2") url = CONFIG.endpointOn2;
+          else if (action === "off2") url = CONFIG.endpointOff2;
+          else if (action === "on3") url = CONFIG.endpointOn3;
+          else if (action === "off3") url = CONFIG.endpointOff3;
+          else if (action === "on4") url = CONFIG.endpointOn4;
+          else if (action === "off4") url = CONFIG.endpointOff4;
+          else if (action === "on5") url = CONFIG.endpointOn5;
+          else if (action === "off5") url = CONFIG.endpointOff5;
+
+          await fetch(url, {
+            method: "POST",
+            headers: {
+              "Authorization": CONFIG.token,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({})
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        showStatus("Errore comandi globali", "error");
+      } finally {
+        setLoading(false);
+      }
+    }
 
     // Momentary Switch Logic
     function addMomentarySwitch(btn, actionOn, actionOff) {
