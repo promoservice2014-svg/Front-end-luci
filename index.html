@@ -83,6 +83,44 @@
       font-size: 0.9rem;
     }
 
+    .config {
+      background: rgba(31, 41, 55, 0.5);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .field {
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    label {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input {
+      background: #0c121c;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 0.9rem;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    input:focus {
+      outline: 2px solid rgba(34, 197, 94, 0.4);
+      border-color: var(--accent);
+    }
+
+    input::placeholder {
+      color: var(--muted);
+    }
+
     button {
       appearance: none;
       border: none;
@@ -110,6 +148,12 @@
     .btn-off {
       background: linear-gradient(135deg, #ef4444, #b91c1c);
       box-shadow: 0 8px 24px rgba(239, 68, 68, 0.23);
+    }
+
+    #btn-curl {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      box-shadow: 0 8px 24px rgba(14, 165, 233, 0.25);
+      color: #04111d;
     }
 
     button:not(:disabled):hover {
@@ -156,17 +200,36 @@
     }
   </style>
 </head>
-<body>
+  <body>
   <main class="card" aria-live="polite">
     <h1>Controllo luce</h1>
     <p>
       Usa i pulsanti per inviare una richiesta POST al Raspberry Pi e accendere o spegnere la luce.
-      Ogni invio aggiorna lo stato in basso con l’esito della chiamata.
+      Puoi personalizzare URL e token per allinearti a Power Automate o ad altri proxy.
     </p>
+
+    <section class="config">
+      <div class="field">
+        <label for="endpoint-on">Endpoint accensione</label>
+        <input id="endpoint-on" value="https://raspberrypi.taild4c19b.ts.net/accendi_luce" />
+      </div>
+      <div class="field">
+        <label for="endpoint-off">Endpoint spegnimento</label>
+        <input id="endpoint-off" value="https://raspberrypi.taild4c19b.ts.net/spegni_luce" />
+      </div>
+      <div class="field">
+        <label for="token">Header Authorization</label>
+        <input id="token" value="Bearer dario-raspi-led-2025-super-token-9fA3k!" />
+        <p class="hint">Usa lo stesso token che funziona da Power Automate o aggiungilo lato proxy.</p>
+      </div>
+    </section>
+
     <div class="actions">
       <button class="btn-on" id="btn-on">Accendi luce</button>
       <button class="btn-off" id="btn-off">Spegni luce</button>
+      <button id="btn-curl">Copia comando curl</button>
     </div>
+
     <div class="helpers">
       <label class="toggle">
         <input type="checkbox" id="no-cors-toggle" />
@@ -177,10 +240,11 @@
       </label>
       <p class="hint">
         Se continui a vedere errori, abilita gli header CORS sull’endpoint o passa da un proxy/reverse proxy
-        che li esponga (ad es. Nginx o Caddy con <code>Access-Control-Allow-Origin</code> e risposta all’OPTIONS).
+        che li esponga (ad es. Nginx, Caddy o Power Automate impostato come proxy con risposta all’OPTIONS).
         In modalità <code>no-cors</code> il browser non può inviare header come <code>Authorization</code>, quindi usa un proxy che li aggiunga lato server.
       </p>
     </div>
+
     <section class="status" id="status">
       <div><strong>Stato:</strong> In attesa di un’azione.</div>
       <div><strong>Ultimo aggiornamento:</strong> —</div>
@@ -189,15 +253,13 @@
   </main>
 
   <script>
-    const TOKEN = "Bearer dario-raspi-led-2025-super-token-9fA3k!";
-    const ENDPOINTS = {
-      on: "https://raspberrypi.taild4c19b.ts.net/accendi_luce",
-      off: "https://raspberrypi.taild4c19b.ts.net/spegni_luce",
-    };
-
     const statusBox = document.getElementById("status");
     const btnOn = document.getElementById("btn-on");
     const btnOff = document.getElementById("btn-off");
+    const btnCurl = document.getElementById("btn-curl");
+    const endpointOnInput = document.getElementById("endpoint-on");
+    const endpointOffInput = document.getElementById("endpoint-off");
+    const tokenInput = document.getElementById("token");
     const noCorsToggle = document.getElementById("no-cors-toggle");
 
     function setLoading(isLoading) {
@@ -233,9 +295,14 @@
       return `Errore di rete: ${message}`;
     }
 
+    function getEndpoint(action) {
+      return action === "on" ? endpointOnInput.value.trim() : endpointOffInput.value.trim();
+    }
+
     async function sendCommand(action) {
-      const url = ENDPOINTS[action];
+      const url = getEndpoint(action);
       const useNoCors = noCorsToggle?.checked;
+      const token = tokenInput.value.trim();
       setLoading(true);
       updateStatus({
         label: "Invio richiesta...",
@@ -248,7 +315,7 @@
         const headers = useNoCors
           ? undefined
           : {
-              Authorization: TOKEN,
+              Authorization: token,
               "Content-Type": "application/json",
             };
 
@@ -289,8 +356,41 @@
       }
     }
 
+    function copyCurl(action) {
+      const url = getEndpoint(action);
+      const token = tokenInput.value.trim();
+      const command = [
+        "curl",
+        "-X POST",
+        `"${url}"`,
+        "-H \"Content-Type: application/json\"",
+        token ? `-H \"Authorization: ${token}\"` : "",
+        "-d \"{}\"",
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      navigator.clipboard
+        .writeText(command)
+        .then(() => {
+          updateStatus({
+            label: "Comando curl copiato",
+            ok: true,
+            detail: "Incolla nel terminale o in Power Automate per replicare la chiamata che funziona.",
+          });
+        })
+        .catch(() => {
+          updateStatus({
+            label: "Impossibile copiare",
+            ok: false,
+            detail: "Il browser ha bloccato l’accesso alla clipboard: copia il comando manualmente.",
+          });
+        });
+    }
+
     btnOn.addEventListener("click", () => sendCommand("on"));
     btnOff.addEventListener("click", () => sendCommand("off"));
+    btnCurl.addEventListener("click", () => copyCurl("on"));
   </script>
 </body>
 </html>
