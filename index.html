@@ -393,7 +393,6 @@
       else if (action === "meeting") url = CONFIG.endpointMeeting;
 
       setLoading(true);
-      showStatus("Invio...", "neutral");
 
       try {
         const response = await fetch(url, {
