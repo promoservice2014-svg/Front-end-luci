@@ -235,7 +235,9 @@
         <input type="checkbox" id="no-cors-toggle" />
         <span>
           Se il browser blocca la chiamata, attiva l’invio in modalità <code>no-cors</code>.
-          La richiesta parte comunque ma il browser non potrà leggere la risposta.
+          La richiesta parte comunque ma il browser non potrà leggere la risposta. Se il tentativo standard
+          fallisce per il CORS, la pagina riprova automaticamente in <code>no-cors</code> (senza header come
+          <code>Authorization</code>): aggiungi il token lato proxy.
         </span>
       </label>
       <p class="hint">
@@ -276,6 +278,28 @@
       `;
     }
 
+    function isLikelyCorsError(error) {
+      const message = (error?.message || "").toLowerCase();
+      return message.includes("failed to fetch") || message.includes("networkerror");
+    }
+
+    function createRequestOptions({ token, useNoCors }) {
+      const headers = useNoCors
+        ? undefined
+        : {
+            Authorization: token,
+            "Content-Type": "application/json",
+          };
+
+      return {
+        method: "POST",
+        headers,
+        body: JSON.stringify({}),
+        mode: useNoCors ? "no-cors" : "cors",
+        cache: "no-store",
+      };
+    }
+
     function explainNetworkError(error, url) {
       const message = error?.message || "Errore sconosciuto";
       const target = new URL(url);
@@ -301,39 +325,24 @@
 
     async function sendCommand(action) {
       const url = getEndpoint(action);
-      const useNoCors = noCorsToggle?.checked;
+      const preferNoCors = noCorsToggle?.checked;
       const token = tokenInput.value.trim();
       setLoading(true);
       updateStatus({
         label: "Invio richiesta...",
         ok: true,
-        detail: `Richiesta POST verso ${url}${useNoCors ? " (modalità no-cors)" : ""}`,
+        detail: `Richiesta POST verso ${url}${preferNoCors ? " (modalità no-cors)" : ""}`,
       });
 
-      try {
-        const body = JSON.stringify({});
-        const headers = useNoCors
-          ? undefined
-          : {
-              Authorization: token,
-              "Content-Type": "application/json",
-            };
-
-        const requestOptions = {
-          method: "POST",
-          headers,
-          body,
-          mode: useNoCors ? "no-cors" : "cors",
-        };
-
-        const response = await fetch(url, requestOptions);
+      const runRequest = async ({ useNoCors, reason }) => {
+        const response = await fetch(url, createRequestOptions({ token, useNoCors }));
 
         if (useNoCors && response.type === "opaque") {
           updateStatus({
-            label: "Richiesta inviata (no-cors)",
+            label: `Richiesta inviata${reason ? ` (${reason})` : ""}`,
             ok: true,
             detail:
-              "La richiesta è partita ma il browser non può leggere la risposta. In no-cors il browser non invia l'header Authorization: usa un proxy che lo aggiunga o abilita il CORS per far accendere la luce.",
+              "Il browser non può leggere la risposta in no-cors e non invia l'header Authorization. Se il server richiede il token, aggiungilo lato proxy o abilita il CORS sull'endpoint.",
           });
           return;
         }
@@ -344,8 +353,34 @@
           ok: response.ok,
           detail: `${response.status} ${response.statusText} — ${text || "nessun corpo restituito"}`,
         });
+      };
+
+      try {
+        await runRequest({ useNoCors: preferNoCors, reason: preferNoCors ? "no-cors forzato" : "" });
       } catch (error) {
         console.error("Errore durante la chiamata al Raspberry Pi", error);
+
+        if (!preferNoCors && isLikelyCorsError(error)) {
+          updateStatus({
+            label: "CORS bloccato, ritento in no-cors",
+            ok: false,
+            detail: "Il browser ha bloccato la risposta. Ritento senza leggere il body: assicurati che il proxy aggiunga l'Authorization.",
+          });
+
+          try {
+            await runRequest({ useNoCors: true, reason: "fallback no-cors" });
+            return;
+          } catch (fallbackError) {
+            console.error("Fallito anche il fallback no-cors", fallbackError);
+            updateStatus({
+              label: "Invio in no-cors non riuscito",
+              ok: false,
+              detail: explainNetworkError(fallbackError, url),
+            });
+            return;
+          }
+        }
+
         updateStatus({
           label: "Impossibile contattare il server",
           ok: false,
