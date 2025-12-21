@@ -134,16 +134,26 @@
   </main>
 
   <section class="card">
-    <h1>Test Email</h1>
-    <div class="actions single">
-      <button class="btn-blink" id="btn-blink-email">Blink</button>
-    </div>
-  </section>
+    <h1>Test D&I</h1>
 
-  <section class="card">
-    <h1>HighImportance</h1>
+    <div style="margin-bottom: 1rem;">
+      <select id="blink-selector" style="
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 12px;
+            background: #0c121c;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+        ">
+        <option value="email">Email</option>
+        <option value="high">HighImportance</option>
+      </select>
+    </div>
+
     <div class="actions single">
-      <button class="btn-blink" id="btn-blink-high">Blink</button>
+      <button class="btn-blink" id="btn-blink">Blink</button>
     </div>
   </section>
 
@@ -161,14 +171,14 @@
     const statusBox = document.getElementById("status");
     const btnOn = document.getElementById("btn-on");
     const btnOff = document.getElementById("btn-off");
-    const btnBlinkEmail = document.getElementById("btn-blink-email");
-    const btnBlinkHigh = document.getElementById("btn-blink-high");
+    const btnBlink = document.getElementById("btn-blink");
+    const blinkSelector = document.getElementById("blink-selector");
 
     function setLoading(isLoading) {
       btnOn.disabled = isLoading;
       btnOff.disabled = isLoading;
-      btnBlinkEmail.disabled = isLoading;
-      btnBlinkHigh.disabled = isLoading;
+      btnBlink.disabled = isLoading;
+      blinkSelector.disabled = isLoading;
     }
 
     function showStatus(message, type = "neutral") {
@@ -219,8 +229,10 @@
 
     btnOn.addEventListener("click", () => sendCommand("on"));
     btnOff.addEventListener("click", () => sendCommand("off"));
-    btnBlinkEmail.addEventListener("click", () => sendCommand("email"));
-    btnBlinkHigh.addEventListener("click", () => sendCommand("high"));
+    btnBlink.addEventListener("click", () => {
+      const selection = blinkSelector.value;
+      sendCommand(selection);
+    });
   </script>
 </body>
 
