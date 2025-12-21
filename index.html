@@ -23,8 +23,11 @@
       margin: 0;
       min-height: 100vh;
       background: radial-gradient(circle at 20% 20%, rgba(34, 197, 94, 0.12), transparent 35%), radial-gradient(circle at 80% 0%, rgba(239, 68, 68, 0.14), transparent 30%), var(--bg);
-      display: grid;
-      place-items: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
       color: var(--text);
       padding: 2rem 1rem;
     }
@@ -52,6 +55,10 @@
       gap: 1rem;
     }
 
+    .actions.single {
+      grid-template-columns: 1fr;
+    }
+
     button {
       appearance: none;
       border: none;
@@ -75,6 +82,12 @@
     .btn-on {
       background: linear-gradient(135deg, #22c55e, #16a34a);
       box-shadow: 0 8px 24px rgba(34, 197, 94, 0.25);
+    }
+
+    .btn-blink {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25);
+      color: #fff;
     }
 
     .btn-off {
@@ -118,24 +131,34 @@
       <button class="btn-on" id="btn-on">ON</button>
       <button class="btn-off" id="btn-off">OFF</button>
     </div>
-
-    <div class="status" id="status"></div>
   </main>
+
+  <section class="card">
+    <h1>Test Email</h1>
+    <div class="actions single">
+      <button class="btn-blink" id="btn-blink">Blink</button>
+    </div>
+  </section>
+
+  <div class="status" id="status"></div>
 
   <script>
     const CONFIG = {
       endpointOn: "https://raspberrypi.taild4c19b.ts.net/accendi_luce",
       endpointOff: "https://raspberrypi.taild4c19b.ts.net/spegni_luce",
+      endpointEmail: "https://raspberrypi.taild4c19b.ts.net/email",
       token: "Bearer dario-raspi-led-2025-super-token-9fA3k!"
     };
 
     const statusBox = document.getElementById("status");
     const btnOn = document.getElementById("btn-on");
     const btnOff = document.getElementById("btn-off");
+    const btnBlink = document.getElementById("btn-blink");
 
     function setLoading(isLoading) {
       btnOn.disabled = isLoading;
       btnOff.disabled = isLoading;
+      btnBlink.disabled = isLoading;
     }
 
     function showStatus(message, type = "neutral") {
@@ -151,7 +174,11 @@
     }
 
     async function sendCommand(action) {
-      const url = action === "on" ? CONFIG.endpointOn : CONFIG.endpointOff;
+      let url;
+      if (action === "on") url = CONFIG.endpointOn;
+      else if (action === "off") url = CONFIG.endpointOff;
+      else if (action === "email") url = CONFIG.endpointEmail;
+
       setLoading(true);
       showStatus("Invio...", "neutral");
 
@@ -181,6 +208,7 @@
 
     btnOn.addEventListener("click", () => sendCommand("on"));
     btnOff.addEventListener("click", () => sendCommand("off"));
+    btnBlink.addEventListener("click", () => sendCommand("email"));
   </script>
 </body>
 
